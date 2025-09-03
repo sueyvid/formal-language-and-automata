@@ -9,22 +9,23 @@ class View(tk.Tk):
 
         self.title("Sem arquivo - Máquina de estados")
         self.geometry("600x600")
+        self.minsize(600, 400)
 
-        self.frame = tk.Frame(self)
-        self.frame.grid(row=0, column=0, padx=10, pady=10)
-
-        self.button_open = tk.Button(self.frame, text="Abrir arquivo", command=self.buscar, font=("Arial", 16))
-        self.button_open.grid(row=0, column=0, columnspan=3)
+        self.button_open = tk.Button(self, text="Abrir arquivo", command=self.buscar, font=("Arial", 16))
+        self.button_open.pack(side=tk.TOP, expand=False, pady=20)
 
         self.texto_var = tk.StringVar()
-        self.label = tk.Label(self.frame, textvariable=self.texto_var, font=("Arial", 16))
-        self.label.grid(row=1, column=0, columnspan=3, pady=20)
+        self.label = tk.Label(self, textvariable=self.texto_var, font=("Arial", 16))
+        self.label.pack(side=tk.TOP, expand=False, pady=50)
 
-        self.button0 = tk.Button(self.frame, text="0", command=lambda: self.button_clicked(0), width=12, height=5, font=("Arial", 16))
+        self.frame_buttons = tk.Frame(self)
+        self.frame_buttons.pack(side=tk.TOP, expand=False, pady=20)
+
+        self.button0 = tk.Button(self.frame_buttons, text="0", command=lambda: self.button_clicked(0), width=12, height=5, font=("Arial", 16))
         self.button0.grid(row=2,column=0, padx=10)
-        self.button1 = tk.Button(self.frame, text="1", command=lambda: self.button_clicked(1), width=12, height=5, font=("Arial", 16))
+        self.button1 = tk.Button(self.frame_buttons, text="1", command=lambda: self.button_clicked(1), width=12, height=5, font=("Arial", 16))
         self.button1.grid(row=2,column=1, padx=10)
-        self.button2 = tk.Button(self.frame, text="r", command=lambda: self.button_clicked(2), width=12, height=5, font=("Arial", 16))
+        self.button2 = tk.Button(self.frame_buttons, text="r", command=lambda: self.button_clicked(2), width=12, height=5, font=("Arial", 16))
         self.button2.grid(row=2,column=2, padx=10)
 
         self.controler = None
