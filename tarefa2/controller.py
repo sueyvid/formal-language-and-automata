@@ -8,12 +8,12 @@ class Controller:
     def processar(self, valor):
         self.model.processar(valor)
 
-    def estado_atual(self):
-        return self.model.estado_atual()
+    def saida_atual(self):
+        return self.model.saida_atual()
 
     def carregar_arquivo(self, filename):
         df = pd.read_csv(filename, header=None)
         matriz = df.values.tolist()
-        TE = matriz[:-1]
-        VS = matriz[-1]
+        TE = matriz[:10]
+        VS = matriz[10:]
         self.model.definir_maquina(TE, VS)

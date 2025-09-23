@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog as fd
 import os
-from scrollable_frame import ScrollableFrame
 
 class View(tk.Tk):
     def __init__(self):
@@ -9,42 +8,20 @@ class View(tk.Tk):
         self.filename = None
 
         self.title("Sem arquivo - Máquina de estados")
-        self.geometry("330x300")
-        self.minsize(330, 300)
-        
-        self.frame_configs = tk.Frame(self)
-        self.frame_configs.pack(side=tk.TOP, expand=False)
-        self.button_open = tk.Button(self.frame_configs, text="Abrir arquivo", command=self.buscar, font=("Arial", 13))
-        self.button_open.grid(row=0, column=0, pady=5)
+        self.geometry("600x600")
+        self.minsize(600, 400)
 
-        self.frame_expand = tk.Frame(self)
-        self.frame_expand.pack(side=tk.TOP, expand=True)
+        self.button_open = tk.Button(self, text="Abrir arquivo", command=self.buscar, font=("Arial", 16))
+        self.button_open.pack(side=tk.TOP, expand=False, pady=20)
 
-        sf = ScrollableFrame(self.frame_expand)
+        self.text_out = tk.StringVar()
+        self.label = tk.Label(self, textvariable=self.text_out, font=("Arial", 16))
+        self.label.pack(side=tk.TOP, expand=False, pady=50)
 
-        for i in range(20):
-            sf.adicionar_conteudo(f"Item {i}")
-
-        self.frame_aplicacao = tk.Frame(self)
-        self.frame_aplicacao.pack(side=tk.TOP, expand=False)
-
-        self.frame_fixo = tk.Frame(self.frame_aplicacao)
-        self.frame_fixo.pack(side="bottom", padx=5)
-
-        self.frame_visor = tk.Frame(self.frame_fixo, bg="#eeeeee")
-        self.frame_visor.pack()
-        self.texto_var = tk.StringVar()
-        self.label = tk.Label(self.frame_visor, textvariable=self.texto_var, font=("Arial", 13), bg="#eeeeee")
-        self.label.grid(row=1, column=0, columnspan=3, pady=20, padx=30)
-
-        self.frame_buttons = tk.Frame(self.frame_fixo)
-        self.frame_buttons.pack(padx=5, pady=5)
-        self.button0 = tk.Button(self.frame_buttons, text="0", command=lambda: self.button_clicked(0), width=4, height=2, font=("Arial", 13))
-        self.button0.grid(row=2,column=0, padx=2, pady=2, sticky="NSWE")
-        self.button1 = tk.Button(self.frame_buttons, text="1", command=lambda: self.button_clicked(1), width=4, height=2, font=("Arial", 13))
-        self.button1.grid(row=2,column=1, padx=2, pady=2, sticky="NSWE")
-        self.button2 = tk.Button(self.frame_buttons, text="r", command=lambda: self.button_clicked(2), width=4, height=2, font=("Arial", 13))
-        self.button2.grid(row=2,column=2, padx=2, pady=2, sticky="NSWE")
+        self.text_in = tk.StringVar()
+        self.entry = tk.Entry(self, textvariable=self.text_in, font=("Arial", 16))
+        self.entry.pack(side=tk.TOP, expand=False, pady=20)
+        self.text_in.trace("w", self.processar)
 
         self.controler = None
 
@@ -54,7 +31,35 @@ class View(tk.Tk):
     def button_clicked(self, valor):
         if self.controller and self.filename:
             self.controller.processar(valor)
-            self.texto_var.set(self.controller.estado_atual())
+            self.text_out.set(self.controller.estado_atual())
+
+    def processar(self, *args):
+        nome_arquivo = os.path.basename(self.filename)
+        n = int(nome_arquivo[0])
+        if self.controller and self.filename and self.text_in.get():
+            try:
+                entrada = self.text_in.get()
+                if len(entrada) <= 3:
+                    digito = f"{int(entrada):03d}"
+                else:
+                    digito = f"{int(entrada):0{n}d}"
+                if len(self.text_in.get()) <= n:
+                    s = ""
+                    for i, value in enumerate(digito):
+                        self.controller.processar(int(value))
+                        if self.controller.saida_atual() != " ":
+                            print(type(self.controller.saida_atual()), self.controller.saida_atual())
+                            s += self.controller.saida_atual()
+                        if i == 2 and len(entrada) > 3:
+                            s += " mil, "
+                    self.text_out.set(s)
+                else:
+                    raise
+            except:
+                self.text_out.set("entrada inválida")
+        else:
+            self.text_out.set("")
+         
 
     def buscar(self):
         filetypes = (
@@ -76,4 +81,4 @@ class View(tk.Tk):
             nome_arquivo = os.path.basename(self.filename)
             self.title(f"{nome_arquivo} - Máquina de estados")
             self.controller.carregar_arquivo(self.filename)
-            self.texto_var.set("")
+            self.text_out.set("")
