@@ -1,10 +1,3 @@
-# ---------------------------------------------
-# UNIVERSIDADE FEDERAL DO RIO GRANDE DO NORTE
-# DCA-3705 – AUTÔMATOS E LINGUAGENS FORMAIS
-# Lista 5 – Autômato com Pilha Determinístico (DPDA)
-# Autor: Sueyvid José
-# ---------------------------------------------
-
 class DPDA:
     def __init__(self, estados, alfabeto_entrada, alfabeto_pilha, transicoes,
                  estado_inicial, simbolo_inicial_pilha, estados_finais):
@@ -48,9 +41,6 @@ class DPDA:
         return aceita
 
 
-# ---------------------------------------------------------
-# Exemplo 1: L = { a^n b^n | n ≥ 0 }
-# ---------------------------------------------------------
 def exemplo_a_n_b_n():
     estados = {'q0', 'q1', 'qf'}
     alfabeto_entrada = {'a', 'b'}
@@ -74,10 +64,6 @@ def exemplo_a_n_b_n():
         resultado = dpda.processar(cadeia)
         print("✅ Aceita" if resultado else "❌ Rejeitada")
 
-
-# ---------------------------------------------------------
-# Exemplo 2: L = { 0^n 1^m | n, m ≥ 0 }
-# ---------------------------------------------------------
 def exemplo_0n_1m():
     estados = {'q0', 'q1', 'qf'}
     alfabeto_entrada = {'0', '1'}
@@ -100,10 +86,6 @@ def exemplo_0n_1m():
         resultado = dpda.processar(cadeia)
         print("✅ Aceita" if resultado else "❌ Rejeitada")
 
-
-# ---------------------------------------------------------
-# Execução
-# ---------------------------------------------------------
 if __name__ == "__main__":
     print("=== Exemplo 1: L = { a^n b^n } ===")
     exemplo_a_n_b_n()
