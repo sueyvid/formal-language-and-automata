@@ -48,7 +48,6 @@ class View(tk.Tk):
                     for i, value in enumerate(digito):
                         self.controller.processar(int(value))
                         if self.controller.saida_atual() != " ":
-                            print(type(self.controller.saida_atual()), self.controller.saida_atual())
                             s += self.controller.saida_atual()
                         if i == 2 and len(entrada) > 3:
                             s += " mil, "
